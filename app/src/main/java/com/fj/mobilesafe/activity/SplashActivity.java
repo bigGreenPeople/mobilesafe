@@ -1,31 +1,61 @@
 package com.fj.mobilesafe.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.fj.mobilesafe.R;
 import com.fj.mobilesafe.utils.StreamUtil;
 
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class SplashActivity extends AppCompatActivity {
     protected static final String tag = "SplashActivity";
+    //更新版本状态码
+    protected static final int UPDATE_VERSION = 100;
+    //进入主界面状态码
+    protected static final int ENTER_HOME = 101;
+    //url错误状态码
+    protected static final int URL_ERROR = 401;
 
     private TextView tx_version_name;
     private int mLocalVersionCode;
 
+    private String versionDes;
+    private String versionCode;
+    private String downloadUrl;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                case UPDATE_VERSION:
+                    break;
+                case ENTER_HOME:
+                    enterHome();
+                    break;
+                case URL_ERROR:
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_main);
+        setContentView(R.layout.activity_splash);
         Log.i("test:", "fujie2");
         initUI();
         initData();
@@ -36,6 +66,15 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void initUI() {
         tx_version_name = (TextView) findViewById(R.id.tv_version_name);
+    }
+
+    /**
+     * 进入主界面
+     */
+    protected void enterHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
@@ -64,8 +103,10 @@ public class SplashActivity extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
+                long startTime = System.currentTimeMillis();
+                Message msg = Message.obtain();
                 try {
-                    URL url = new URL("http://10.0.2.2:8080/update74.json");
+                    URL url = new URL("https://qutu02.com/app/game_open/debug/testJson");
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
                     urlConnection.setConnectTimeout(2000);
@@ -78,13 +119,41 @@ public class SplashActivity extends AppCompatActivity {
                         InputStream inputStream = urlConnection.getInputStream();
                         String requestJson = StreamUtil.streamToString(inputStream);
                         Log.i(tag, requestJson);
+
+                        JSONObject jsonObject = new JSONObject(requestJson);
+                        String versionName = jsonObject.getString("versionName");
+                        versionDes = jsonObject.getString("versionDes");
+                        versionCode = jsonObject.getString("versionCode");
+                        downloadUrl = jsonObject.getString("downloadUrl");
+                        Log.i(tag, versionName);
+                        Log.i(tag, versionDes);
+                        Log.i(tag, versionCode);
+                        Log.i(tag, downloadUrl);
+
+                        if (mLocalVersionCode < Integer.parseInt(versionCode)) {
+                            msg.what = UPDATE_VERSION;
+                        } else {
+                            msg.what = ENTER_HOME;
+                        }
                     }
 
                 } catch (Exception e) {
+                    msg.what = URL_ERROR;
                     e.printStackTrace();
+                } finally {
+                    //时间延时
+                    long endTime = System.currentTimeMillis();
+                    if (endTime - startTime < 4000) {
+                        try {
+                            Thread.sleep(4000-(endTime-startTime));
+                        }catch (Exception time_e){
+                            time_e.printStackTrace();
+                        }
+                    }
+                    handler.sendMessage(msg);
                 }
             }
-        };
+        }.start();
     }
 
     /**
