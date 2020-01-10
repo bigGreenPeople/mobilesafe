@@ -1,12 +1,17 @@
 package com.fj.mobilesafe.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -14,9 +19,14 @@ import android.widget.TextView;
 
 import com.fj.mobilesafe.R;
 import com.fj.mobilesafe.utils.StreamUtil;
+import com.fj.mobilesafe.utils.ToastUtil;
 
 import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -42,11 +52,14 @@ public class SplashActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case UPDATE_VERSION:
+                    //弹出对话框,提示用户更新
+                    showUpdateDialog();
                     break;
                 case ENTER_HOME:
                     enterHome();
                     break;
                 case URL_ERROR:
+                    ToastUtil.show(getApplicationContext(), "网络错误");
                     break;
             }
         }
@@ -59,6 +72,121 @@ public class SplashActivity extends AppCompatActivity {
         Log.i("test:", "fujie2");
         initUI();
         initData();
+    }
+
+    /**
+     * 弹出对话框,提示用户更新
+     */
+    protected void showUpdateDialog() {
+        //这里使用Activity的上文 不能使用Application的上下文
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle("版本更新");
+        builder.setMessage(versionDes);
+
+        builder.setPositiveButton("稍后更新", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                enterHome();
+            }
+        });
+
+        builder.setNegativeButton("立即更新", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //下载apk,apk链接地址,downloadUrl
+                downloadApk();
+            }
+        });
+
+        //点击取消事件监听
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //即使用户点击取消,也需要让其进入应用程序主界面
+                enterHome();
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    protected void downloadApk() {
+        ToastUtil.show(getApplicationContext(), "更新中...");
+        //apk下载链接地址,放置apk的所在路径
+
+        //1,判断sd卡是否可用,是否挂在上
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            //得到sd卡路径
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "mobilesafe.apk";
+            RequestParams requestParams = new RequestParams(downloadUrl);
+            // 为RequestParams设置文件下载后的保存路径
+            requestParams.setSaveFilePath(path);
+            // 下载完成后自动为文件命名
+            requestParams.setAutoRename(true);
+
+            x.http().get(requestParams, new Callback.ProgressCallback<File>() {
+                @Override
+                public void onSuccess(File result) {
+                    Log.i(tag, "下载成功");
+                    installApk(result);
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    Log.i(tag, "下载错误");
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+                    Log.i(tag, "取消下载");
+                }
+
+                @Override
+                public void onFinished() {
+                    Log.i(tag, "下载完成");
+                }
+
+                @Override
+                public void onWaiting() {
+                    Log.i(tag, "等待下载");
+                }
+
+                @Override
+                public void onStarted() {
+                    Log.i(tag, "开始下载");
+                }
+
+                @Override
+                public void onLoading(long total, long current, boolean isDownloading) {
+                    Log.i(tag, "正在下载中......");
+                    Log.i(tag, "下载中........");
+                    Log.i(tag, "total = " + total);
+                    Log.i(tag, "current = " + current);
+                }
+            });
+
+        }
+    }
+
+
+    /**
+     * 安装对应apk
+     *
+     * @param file 安装文件
+     */
+    protected void installApk(File file) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        enterHome();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -145,8 +273,8 @@ public class SplashActivity extends AppCompatActivity {
                     long endTime = System.currentTimeMillis();
                     if (endTime - startTime < 4000) {
                         try {
-                            Thread.sleep(4000-(endTime-startTime));
-                        }catch (Exception time_e){
+                            Thread.sleep(4000 - (endTime - startTime));
+                        } catch (Exception time_e) {
                             time_e.printStackTrace();
                         }
                     }
