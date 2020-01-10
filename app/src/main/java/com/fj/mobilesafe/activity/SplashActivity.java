@@ -15,6 +15,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fj.mobilesafe.R;
@@ -41,6 +43,8 @@ public class SplashActivity extends AppCompatActivity {
     protected static final int URL_ERROR = 401;
 
     private TextView tx_version_name;
+    private RelativeLayout rl_root;
+
     private int mLocalVersionCode;
 
     private String versionDes;
@@ -72,6 +76,17 @@ public class SplashActivity extends AppCompatActivity {
         Log.i("test:", "fujie2");
         initUI();
         initData();
+        //初始化动画
+        initAnimation();
+    }
+
+    /**
+     * 添加淡入动画效果
+     */
+    private void initAnimation() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+        alphaAnimation.setDuration(2000);
+        rl_root.startAnimation(alphaAnimation);
     }
 
     /**
@@ -194,6 +209,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void initUI() {
         tx_version_name = (TextView) findViewById(R.id.tv_version_name);
+        rl_root = (RelativeLayout) findViewById(R.id.rl_root);
     }
 
     /**
@@ -271,9 +287,9 @@ public class SplashActivity extends AppCompatActivity {
                 } finally {
                     //时间延时
                     long endTime = System.currentTimeMillis();
-                    if (endTime - startTime < 4000) {
+                    if (endTime - startTime < 2000) {
                         try {
-                            Thread.sleep(4000 - (endTime - startTime));
+                            Thread.sleep(2000 - (endTime - startTime));
                         } catch (Exception time_e) {
                             time_e.printStackTrace();
                         }
