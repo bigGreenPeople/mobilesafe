@@ -24,4 +24,12 @@
         android:text="秋天秋天悄悄过去,留下小秘密,啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊"
         android:textColor="#000" />
 
+    <GridView
+        android:id="@+id/gv_home"
+        android:numColumns="3"
+        android:verticalSpacing="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </GridView>
+
 </LinearLayout>
