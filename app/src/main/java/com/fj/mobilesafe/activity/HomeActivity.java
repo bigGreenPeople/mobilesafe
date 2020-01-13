@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.fj.mobilesafe.R;
 import com.fj.mobilesafe.utils.ConstantValue;
+import com.fj.mobilesafe.utils.Md5Util;
 import com.fj.mobilesafe.utils.SpUtil;
 import com.fj.mobilesafe.utils.ToastUtil;
 import com.fj.mobilesafe.view.SettingItemView;
@@ -77,6 +78,7 @@ public class HomeActivity extends Activity {
 
                 if (!TextUtils.isEmpty(confirmPsd)) {
                     String psd = SpUtil.getString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, "");
+                    confirmPsd = Md5Util.encoder(confirmPsd);
                     if (confirmPsd.equals(psd)) {
                         //进入应用手机防盗模块,开启一个新的activity
                         Intent intent = new Intent(getApplicationContext(), TestActivity.class);
@@ -128,7 +130,7 @@ public class HomeActivity extends Activity {
                         Intent intent = new Intent(getApplicationContext(), TestActivity.class);
                         startActivity(intent);
                         alertDialog.dismiss();
-                        SpUtil.putString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, psd);
+                        SpUtil.putString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, Md5Util.encoder(psd));
                     } else {
                         ToastUtil.show(getApplicationContext(), "确认密码错误");
                     }
