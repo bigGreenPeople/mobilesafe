@@ -2,6 +2,7 @@ package com.fj.mobilesafe.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
@@ -11,7 +12,7 @@ import com.fj.mobilesafe.R;
 
 public class SettingItemView extends RelativeLayout {
 
-    private static final String NAMESPACE = "http://schemas.android.com/apk/res/com.itheima.mobilesafe74";
+    private static final String NAMESPACE = "http://schemas.android.com/apk/res/com.fj.mobilesafe";
     private static final String tag = "SettingItemView";
     private CheckBox cb_box;
     private TextView tv_des;
@@ -35,6 +36,29 @@ public class SettingItemView extends RelativeLayout {
         TextView tv_title = (TextView) findViewById(R.id.tv_title);
         tv_des = (TextView) findViewById(R.id.tv_des);
         cb_box = (CheckBox) findViewById(R.id.cb_box);
+
+        //获取自定义以及原生属性的操作,写在此处,AttributeSet attrs对象中获取
+        initAttrs(attrs);
+        //获取布局文件中定义的字符串,赋值给自定义组合控件的标题
+        tv_title.setText(mDestitle);
+    }
+
+    /**
+     * 返回属性集合中自定义属性属性值
+     *
+     * @param attrs 构造方法中维护好的属性集合
+     */
+    private void initAttrs(AttributeSet attrs) {
+//        for (int i = 0; i < attrs.getAttributeCount(); i++) {
+//            Log.i(tag, "name = " + attrs.getAttributeName(i));
+//            Log.i(tag, "value = " + attrs.getAttributeValue(i));
+//            Log.i(tag, "分割线 ================================= ");
+//        }
+
+        mDestitle = attrs.getAttributeValue(NAMESPACE, "destitle");
+        mDesoff = attrs.getAttributeValue(NAMESPACE, "desoff");
+        mDeson = attrs.getAttributeValue(NAMESPACE, "deson");
+
     }
 
 

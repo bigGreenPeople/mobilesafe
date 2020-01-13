@@ -4,11 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.fj.mobilesafe.view.SettingItemView
+    <com.fj.mobilesafe.view.SettingItemView xmlns:mobilesafe="http://schemas.android.com/apk/res/com.fj.mobilesafe"
+        android:id="@+id/siv_update"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        mobilesafe:desoff="自动更新已关闭"
+        mobilesafe:deson="自动更新已开启"
+        mobilesafe:destitle="自动更新设置" />
 
-    <com.fj.mobilesafe.view.SettingItemView
+   <!-- <com.fj.mobilesafe.view.SettingItemView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 </LinearLayout>

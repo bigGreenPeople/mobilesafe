@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fj.mobilesafe.R;
+import com.fj.mobilesafe.utils.ConstantValue;
+import com.fj.mobilesafe.utils.SpUtil;
 import com.fj.mobilesafe.utils.StreamUtil;
 import com.fj.mobilesafe.utils.ToastUtil;
 
@@ -237,7 +239,13 @@ public class SplashActivity extends AppCompatActivity {
          * 新版本的描述信息
          * 服务器版本号
          * 新版本apk下载地址*/
-        checkVersion();
+        //判断设置信息
+        if (SpUtil.getBoolean(getApplicationContext(), ConstantValue.OPEN_UPDATE, false)) {
+            checkVersion();
+        } else {
+            handler.sendEmptyMessageDelayed(ENTER_HOME, 2000);
+        }
+
     }
 
     /**
