@@ -61,8 +61,7 @@ public class HomeActivity extends Activity {
         final AlertDialog alertDialog = builder.create();
 
         final View inflate = View.inflate(this, R.layout.dialog_confirm_psd, null);
-        alertDialog.setView(inflate);
-
+        alertDialog.setView(inflate, 0, 0, 0, 0);
         alertDialog.show();
 
         Button bt_submit = (Button) inflate.findViewById(R.id.bt_submit);
@@ -81,7 +80,7 @@ public class HomeActivity extends Activity {
                     confirmPsd = Md5Util.encoder(confirmPsd);
                     if (confirmPsd.equals(psd)) {
                         //进入应用手机防盗模块,开启一个新的activity
-                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), SetupOverActivity.class);
                         startActivity(intent);
                         //跳转到新的界面以后需要去隐藏对话框
                         alertDialog.dismiss();
@@ -110,7 +109,8 @@ public class HomeActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog alertDialog = builder.create();
         final View inflate = View.inflate(this, R.layout.dialog_set_psd, null);
-        alertDialog.setView(inflate);
+        alertDialog.setView(inflate, 0, 0, 0, 0);
+
         alertDialog.show();
 
         Button bt_submit = (Button) inflate.findViewById(R.id.bt_submit);
@@ -127,7 +127,7 @@ public class HomeActivity extends Activity {
 
                 if (!TextUtils.isEmpty(psd) && !TextUtils.isEmpty(confirmPsd)) {
                     if (psd.equals(confirmPsd)) {
-                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), SetupOverActivity.class);
                         startActivity(intent);
                         alertDialog.dismiss();
                         SpUtil.putString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, Md5Util.encoder(psd));
@@ -156,10 +156,10 @@ public class HomeActivity extends Activity {
         };
 
         mDrawableIds = new int[]{
-                R.mipmap.home_safe, R.mipmap.home_callmsgsafe,
-                R.mipmap.home_apps, R.mipmap.home_taskmanager,
-                R.mipmap.home_netmanager, R.mipmap.home_trojan,
-                R.mipmap.home_sysoptimize, R.mipmap.home_tools, R.mipmap.home_settings
+                R.drawable.home_safe, R.drawable.home_callmsgsafe,
+                R.drawable.home_apps, R.drawable.home_taskmanager,
+                R.drawable.home_netmanager, R.drawable.home_trojan,
+                R.drawable.home_sysoptimize, R.drawable.home_tools, R.drawable.home_settings
         };
         //九宫格控件设置数据适配器(等同ListView数据适配器)
         gv_home.setAdapter(new MyAdapter());

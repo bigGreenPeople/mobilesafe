@@ -9,7 +9,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="TitleStyle" >
+    <style name="TitleStyle">
         <!-- Customize your theme here. -->
         <item name="android:gravity">center</item>
         <item name="android:textSize">20sp</item>
@@ -20,4 +20,25 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style	name="preBtn">
+        <item name="android:padding">5dp</item>
+        <item name="android:text">上一页</item>
+        <item name="android:onClick">prePage</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:background">@drawable/selector_next_btn_bg</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--android:padding="5dp"-->
+    <style name="nextBtn">
+        <item name="android:padding">5dp</item>
+        <item name="android:onClick">nextPage</item>
+        <item name="android:text">下一页</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:background">@drawable/selector_next_btn_bg</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>
