@@ -15,7 +15,7 @@ import com.fj.mobilesafe.utils.ConstantValue;
 import com.fj.mobilesafe.utils.SpUtil;
 import com.fj.mobilesafe.view.SettingItemView;
 
-public class Setup1Activity extends Activity {
+public class Setup1Activity extends BaseSetupActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,11 +23,18 @@ public class Setup1Activity extends Activity {
         setContentView(R.layout.activity_setup1);
     }
 
-
-    public void nextPage(View view) {
+    @Override
+    protected void showNextPage() {
         Intent intent = new Intent(this, Setup2Activity.class);
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.next_in_anim, R.anim.next_out_anim);
     }
+
+    @Override
+    protected void showPrePage() {
+
+    }
+
+
 }
