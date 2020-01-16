@@ -48,6 +48,8 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"></action>
             </intent-filter>
         </receiver>
+
+        <service android:name=".service.LocationService" />
     </application>
 
 </manifest>
