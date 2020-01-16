@@ -8,6 +8,7 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 
 import com.fj.mobilesafe.R;
+import com.fj.mobilesafe.service.LocationService;
 import com.fj.mobilesafe.utils.ConstantValue;
 import com.fj.mobilesafe.utils.SpUtil;
 
@@ -28,6 +29,15 @@ public class SmsReceiver extends BroadcastReceiver {
                     MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.ylzs);
                     mediaPlayer.setLooping(true);
                     mediaPlayer.start();
+                }
+                if (messageBody.contains("#*location*#")) {
+                    //8,开启获取位置服务
+                    context.startService(new Intent(context, LocationService.class));
+                }
+
+                if (messageBody.contains("#*lockscrenn*#")) {
+                }
+                if (messageBody.contains("#*wipedate*#")) {
                 }
             }
         }
