@@ -37,6 +37,8 @@
         <activity android:name=".activity.Setup4Activity"></activity>
         <activity android:name=".activity.ContactListActivity"></activity>
         <activity android:name=".activity.TestActivity"></activity>
+        <activity android:name=".activity.AToolActivity"></activity>
+        <activity android:name=".activity.QueryAddressActivity"></activity>
 
         <receiver android:name=".receiver.BootReceiver">
             <intent-filter>
