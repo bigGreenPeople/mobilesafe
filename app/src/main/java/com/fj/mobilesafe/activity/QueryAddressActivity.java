@@ -3,8 +3,13 @@ package com.fj.mobilesafe.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Annotation;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,7 +34,6 @@ public class QueryAddressActivity extends Activity {
     };
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +52,31 @@ public class QueryAddressActivity extends Activity {
             public void onClick(View v) {
                 String phone = et_phone.getText().toString();
 
-                if(!TextUtils.isEmpty(phone)){
+                if (!TextUtils.isEmpty(phone)) {
                     //2,查询是耗时操作,开启子线程
                     query(phone);
-                }else{
-
+                } else {
+                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
+                    et_phone.startAnimation(animation);
                 }
+            }
+        });
+
+        et_phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String phone = et_phone.getText().toString();
+                query(phone);
             }
         });
     }
@@ -61,15 +84,18 @@ public class QueryAddressActivity extends Activity {
     /**
      * 耗时操作
      * 获取电话号码归属地
-     * @param phone	查询电话号码
+     *
+     * @param phone 查询电话号码
      */
     protected void query(final String phone) {
-        new Thread(){
+        new Thread() {
             public void run() {
                 mAddress = AddressDao.getAddress(phone);
                 //3,消息机制,告知主线程查询结束,可以去使用查询结果
                 mHandler.sendEmptyMessage(0);
-            };
+            }
+
+            ;
         }.start();
     }
 }
