@@ -12,7 +12,25 @@
         mobilesafe:deson="自动更新已开启"
         mobilesafe:destitle="自动更新设置" />
 
-   <!-- <com.fj.mobilesafe.view.SettingItemView
+    <com.fj.mobilesafe.view.SettingItemView xmlns:mobilesafe="http://schemas.android.com/apk/res/com.fj.mobilesafe"
+        android:id="@+id/siv_address"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />-->
+        android:layout_height="wrap_content"
+        mobilesafe:desoff="归属地的显示已关闭"
+        mobilesafe:deson="归属地的显示已开启"
+        mobilesafe:destitle="电话归属地的显示设置" />
+
+    <com.fj.mobilesafe.view.SettingClickView
+        android:id="@+id/scv_toast_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.fj.mobilesafe.view.SettingClickView
+        android:id="@+id/scv_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- <com.fj.mobilesafe.view.SettingItemView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" />-->
 </LinearLayout>

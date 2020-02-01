@@ -1,8 +1,10 @@
 package com.fj.mobilesafe.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.text.Annotation;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -58,6 +60,13 @@ public class QueryAddressActivity extends Activity {
                 } else {
                     Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
                     et_phone.startAnimation(animation);
+
+                    //手机震动效果(vibrator 震动)
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    //震动毫秒值
+                    vibrator.vibrate(2000);
+                    //规律震动(震动规则(不震动时间,震动时间,不震动时间,震动时间.......),重复次数)
+                    vibrator.vibrate(new long[]{2000,5000,2000,5000}, -1);
                 }
             }
         });
