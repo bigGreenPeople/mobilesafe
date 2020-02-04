@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.fj.mobilesafe.db.dao.BlackNumberDao;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,5 +25,13 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         assertEquals("com.fj.mobilesafe", appContext.getPackageName());
+    }
+
+    @Test
+    public void test01() {
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        BlackNumberDao dao = BlackNumberDao.getInstance(appContext);
+        dao.insert("15079247509", "2");
     }
 }

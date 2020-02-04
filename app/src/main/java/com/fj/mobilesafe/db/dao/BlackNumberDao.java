@@ -20,7 +20,7 @@ public class BlackNumberDao {
     //BlackNumberDao单例模式
     //1,私有化构造方法
     private BlackNumberDao(Context context) {
-        BlackNumberOpenHelper blackNumberOpenHelper = new BlackNumberOpenHelper(context);
+        blackNumberOpenHelper = new BlackNumberOpenHelper(context);
     }
 
     public static BlackNumberDao getInstance(Context context) {
@@ -106,6 +106,53 @@ public class BlackNumberDao {
      * @param index 查询的索引值
      */
     public List<BlackNumberInfo> find(int index) {
-        return null;
+        SQLiteDatabase db = blackNumberOpenHelper.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("select phone,mode from blacknumber order by _id desc limit ?,20;", new String[]{index + ""});
+
+        List<BlackNumberInfo> blackNumberList = new ArrayList<BlackNumberInfo>();
+        while (cursor.moveToNext()) {
+            BlackNumberInfo blackNumberInfo = new BlackNumberInfo();
+            blackNumberInfo.phone = cursor.getString(0);
+            blackNumberInfo.mode = cursor.getString(1);
+            blackNumberList.add(blackNumberInfo);
+        }
+        cursor.close();
+        db.close();
+
+        return blackNumberList;
+    }
+
+    /**
+     * @return 数据库中数据的总条目个数, 返回0代表没有数据或异常
+     */
+    public int getCount() {
+        SQLiteDatabase db = blackNumberOpenHelper.getWritableDatabase();
+        int count = 0;
+        Cursor cursor = db.rawQuery("select count(*) from blacknumber;", null);
+        if (cursor.moveToNext()) {
+            count = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+        return count;
+    }
+
+    /**
+     * @param phone 作为查询条件的电话号码
+     * @return 传入电话号码的拦截模式    1:短信	2:电话	3:所有	0:没有此条数据
+     */
+    public int getMode(String phone) {
+        SQLiteDatabase db = blackNumberOpenHelper.getWritableDatabase();
+        int mode = 0;
+        Cursor cursor = db.query("blacknumber", new String[]{"mode"}, "phone = ?", new String[]{phone}, null, null, null);
+        if (cursor.moveToNext()) {
+            mode = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+        return mode;
     }
 }

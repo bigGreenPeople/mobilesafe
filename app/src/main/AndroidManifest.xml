@@ -16,9 +16,9 @@
     <!-- 在窗体上挂在view的权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 去电广播监听的权限 -->
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <!-- 拦截电话需要用到的权限 -->
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".application.AndroidApplication"
@@ -46,6 +46,8 @@
         <activity android:name=".activity.TestActivity"></activity>
         <activity android:name=".activity.AToolActivity"></activity>
         <activity android:name=".activity.QueryAddressActivity"></activity>
+        <activity android:name=".activity.BlackNumberActivity"></activity>
+
         <activity
             android:name=".activity.ToastLocationActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
@@ -63,6 +65,8 @@
 
         <service android:name=".service.LocationService" />
         <service android:name=".service.AddressService" />
+        <service android:name=".service.BlackNumberService" />
+
     </application>
 
 </manifest>

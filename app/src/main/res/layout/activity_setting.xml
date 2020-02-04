@@ -30,6 +30,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <com.fj.mobilesafe.view.SettingItemView xmlns:mobilesafe="http://schemas.android.com/apk/res/com.fj.mobilesafe"
+        android:id="@+id/siv_blacknumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        mobilesafe:desoff="黑名单拦截已关闭"
+        mobilesafe:deson="黑名单拦截已开启"
+        mobilesafe:destitle="黑名单拦截设置" />
     <!-- <com.fj.mobilesafe.view.SettingItemView
          android:layout_width="match_parent"
          android:layout_height="wrap_content" />-->
