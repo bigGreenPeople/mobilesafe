@@ -18,4 +18,21 @@
         android:padding="5dp"
         android:text="归属地查询"
         android:textSize="18sp"></TextView>
+
+    <TextView
+        android:id="@+id/tv_sms_backup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_atool_item_bg"
+        android:drawableLeft="@android:drawable/btn_star"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="短信备份"
+        android:textSize="18sp"></TextView>
+
+    <ProgressBar
+        android:id="@+id/pb_bar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
