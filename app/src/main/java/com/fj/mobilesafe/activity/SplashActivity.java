@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -84,22 +85,52 @@ public class SplashActivity extends AppCompatActivity {
         initAnimation();
         //初始化数据库
         initDB();
+        if(!SpUtil.getBoolean(this, ConstantValue.HAS_SHORTCUT, false)){
+            //生成快捷方式
+            initShortCut();
+        }
+    }
+
+    /**
+     * 生成快捷方式
+     */
+    private void initShortCut() {
+        //1,给intent维护图标,名称
+        Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+        //维护图标
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON,
+                BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
+        //名称
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "黑马卫士");
+        //2,点击快捷方式后跳转到的activity
+        //2.1维护开启的意图对象
+        Intent shortCutIntent = new Intent("android.intent.action.HOME");
+        shortCutIntent.addCategory("android.intent.category.DEFAULT");
+
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortCutIntent);
+        //3,发送广播
+        sendBroadcast(intent);
+        //4,告知sp已经生成快捷方式
+        SpUtil.putBoolean(this, ConstantValue.HAS_SHORTCUT, true);
     }
 
     private void initDB() {
         //1,归属地数据拷贝过程
         initAddressDB("address.db");
+        //2,常用号码数据库拷贝过程
+        initAddressDB("commonnum.db");
     }
 
     /**
      * 拷贝数据库值files文件夹下
-     * @param dbName	数据库名称
+     *
+     * @param dbName 数据库名称
      */
     private void initAddressDB(String dbName) {
         //1,在files文件夹下创建同名dbName数据库文件过程
         File files = getFilesDir();
         File file = new File(files, dbName);
-        if(file.exists()){
+        if (file.exists()) {
             return;
         }
         InputStream stream = null;
@@ -112,13 +143,13 @@ public class SplashActivity extends AppCompatActivity {
             //4,每次的读取内容大小
             byte[] bs = new byte[1024];
             int temp = -1;
-            while( (temp = stream.read(bs))!=-1){
+            while ((temp = stream.read(bs)) != -1) {
                 fos.write(bs, 0, temp);
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }finally{
-            if(stream!=null && fos!=null){
+        } finally {
+            if (stream != null && fos != null) {
                 try {
                     stream.close();
                     fos.close();
