@@ -11,6 +11,7 @@ import android.view.View;
 import com.fj.mobilesafe.R;
 import com.fj.mobilesafe.service.AddressService;
 import com.fj.mobilesafe.service.BlackNumberService;
+import com.fj.mobilesafe.service.WatchDogService;
 import com.fj.mobilesafe.utils.ConstantValue;
 import com.fj.mobilesafe.utils.ServiceUtil;
 import com.fj.mobilesafe.utils.SpUtil;
@@ -31,7 +32,31 @@ public class SettingActivity extends Activity {
         initToastStyle();
         initLocation();
         initBlacknumber();
+        initAppLock();
+    }
 
+    /**
+     * 初始化程序锁方法
+     */
+    private void initAppLock() {
+        final SettingItemView siv_app_lock = (SettingItemView) findViewById(R.id.siv_app_lock);
+        boolean isRunning = ServiceUtil.isRunning(this, "com.fj.mobilesafe.service.WatchDogService");
+        siv_app_lock.setCheck(isRunning);
+
+        siv_app_lock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isCheck = siv_app_lock.isCheck();
+                siv_app_lock.setCheck(!isCheck);
+                if (!isCheck) {
+                    //开启服务
+                    startService(new Intent(getApplicationContext(), WatchDogService.class));
+                } else {
+                    //关闭服务
+                    stopService(new Intent(getApplicationContext(), WatchDogService.class));
+                }
+            }
+        });
     }
 
     /**
